@@ -1,0 +1,44 @@
+
+adress-https://sa12sept.dfs.core.windows.net
+
+Dynamic Table using openrowset
+select top 100 *
+from openrowset(
+    bulk 'https://sa12sept.dfs.core.windows.net/adityafile/yellow_tripdata_2023-01.parquet',
+    format = 'parquet'
+    ) AS[result]
+
+create database DataexplorationDB 
+     COLLATE Latin1_General_100_BIN2_UTF8
+
+
+use dataexplorationDB
+
+create external data source sa 
+with  (location = 'https://sa12sept.dfs.core.windows.net')
+
+
+create login user_data_explorer with password = 'Aditya@12345'
+
+
+create login user_data_explorer with password = 'Aditya@12345' ---Sql pool user
+
+
+create user userdb_data_explorer for login user_data_explorer;   -----database user
+go 
+
+
+grant ADMINISTER database bulk OPERATIONS TO userdb_data_explorer;
+go
+
+
+
+select top 100 *
+from openrowset(
+    bulk '/adityafile/yellow_tripdata_2023-01.parquet',
+    data_source='sa',
+    format = 'parquet'
+    ) AS[result]
+
+
+Dedicated Sql pool-dedicated12septaditya
